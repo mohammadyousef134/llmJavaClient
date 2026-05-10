@@ -1,5 +1,6 @@
 package com.example.llmjavaclient.client;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -9,16 +10,19 @@ import java.util.Map;
 public class OllamaClient {
 
     private final RestClient restClient;
-
+    @Value("${ollama.base-url}")
+    private String ollamaUrl;
+    @Value("${ollama.model}")
+    private String ollamaModel;
     public OllamaClient() {
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:11434")
+                .baseUrl(ollamaUrl)
                 .build();
     }
 
     public String ask(String prompt) {
         Map<String, Object> requestBody = Map.of(
-                "model", "llama3.2",
+                "model", ollamaModel,
                 "prompt", prompt,
                 "stream", false
         );
